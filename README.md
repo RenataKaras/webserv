@@ -33,12 +33,16 @@
 
     ```int server_fd = socket(domain, type, protocol)```
     - **domain**, or address family is a communication domain in which the socket should be created
+      - **where?** (IPv4)
       - ```AF_INET (IP)```, ```AF_INET (IPv6)```, ```AF_UNIX (local channel, similar to pipes)```, ```AF_ISO (ISO protocols)```, ```AF_NS (Xerox Network Systems protocols)```
     - **type** of service, selected according to the properties required by the application
+      - **how?** (stream vs datagram)
       - ```SOCK_STREAM (virtual circuit service)```, ```SOCK_DGRAM (datagram service)```, ```SOCK_RAW (direct IP service)```
     - **protocol**, indicate a specific protocol to use in supporting the sockets operation
+      - **exact rulebook**, we use 0 because AF_INET + SOCK_STREAM combo = TCP
       - useful in cases where some families may have more than one protocol to support a given type of service
-    - return value is a file descriptor (small int), domain is ```AF_INET``` because we want to specify the IP address family, and type is ```SOCK_STREAM```, protocol is 0 *(because there are no variations on the protocol - I should check if this changes when we have multiple connections)* 
+      - 0 for a protocol means *choose the **default protocol** for this address family + socket type*
+    - return value is a file descriptor (small int), domain is ```AF_INET``` because we want to specify the IP address family, and type is ```SOCK_STREAM```, protocol is 0 *(because there are no variations on the protocol - I should check if this changes when we have multiple connections)*
   - Identify the socket
   - On the server, wait for an incoming connection
   - Send and receive messages
