@@ -51,8 +51,7 @@
 
       ```int bind(int socket, const struct sockaddr *address, socklen_t address_len);```
       - ```socket``` is the socket that was created with the *socket* system call (a fd), structure ```sockaddr``` is a generic wrapper that allows the OS to be able to read the first couple of bytes that identify the address family, and ```address_len``` says how many bytes defines the address
-      - ```*address``` is a pointer to a real address struct based on the generic interface of ```sockaddr```
-      - for IP networking, we use ```struct sockaddr_in```, which is predefined in ```netinet\in.h```:
+      - ```*address``` is a pointer to a real address struct based on the generic interface of ```sockaddr```, for IP networking, we use ```struct sockaddr_in```, which is predefined in ```netinet\in.h```:
    
         ```struct sockaddr_in 
           { 
@@ -62,7 +61,15 @@
               struct in_addr    sin_addr; 
               char              sin_zero[8]; 
           };
-  - On the server, wait for an incoming connection
-  - Send and receive messages
-  - Close the socket
+      - before calling *bind*, we need to fill out this structure with three key parts:
+        1. ```sin_family``` -  the address family we used when we set up the socket (```AF_INET```)
+        2. ```sin_port``` - the port number (the transport address)
+            - **client** that doesn't receive any incoming connections just lets the operating system pick any available port number by specifying port 0
+            - **server** picks a specific number since clients will need to know a port number to connect to
+        3. ```sin_addr``` - the address for this socket, which is your machine's IP address
+            - most of the time we don't care to specify a specific interface and can let the OS use whatever it wants, the special address for this is 0.0.0.0., or ```INADDR_ANY```
+         
+  - ### On the server, wait for an incoming connection
+  - ### Send and receive messages
+  - ### Close the socket
 
