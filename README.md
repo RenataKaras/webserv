@@ -50,18 +50,18 @@
     - this operation is called ***binding an address*** and the **bind** system call is used for this
 
       ```int bind(int socket, const struct sockaddr *address, socklen_t address_len);```
-    - ```socket``` is the socket that was created with the *socket* system call (a fd), structure ```sockaddr``` is a generic wrapper that allows the OS to be able to read the first couple of bytes that identify the address family, and ```address_len``` says how many bytes defines the address
-    - ```*address``` is a pointer to a real address struct based on the generic interface of ```sockaddr```
-    - for IP networking, we use ```struct sockaddr_in```, which is predefined in ```netinet\in.h```:
+      - ```socket``` is the socket that was created with the *socket* system call (a fd), structure ```sockaddr``` is a generic wrapper that allows the OS to be able to read the first couple of bytes that identify the address family, and ```address_len``` says how many bytes defines the address
+      - ```*address``` is a pointer to a real address struct based on the generic interface of ```sockaddr```
+      - for IP networking, we use ```struct sockaddr_in```, which is predefined in ```netinet\in.h```:
    
-      ```struct sockaddr_in 
-        { 
-            __uint8_t         sin_len; 
-            sa_family_t       sin_family; 
-            in_port_t         sin_port; 
-            struct in_addr    sin_addr; 
-            char              sin_zero[8]; 
-        };
+        ```struct sockaddr_in 
+          { 
+              __uint8_t         sin_len; 
+              sa_family_t       sin_family; 
+              in_port_t         sin_port; 
+              struct in_addr    sin_addr; 
+              char              sin_zero[8]; 
+          };
   - On the server, wait for an incoming connection
   - Send and receive messages
   - Close the socket
