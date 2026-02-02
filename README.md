@@ -29,7 +29,7 @@
 - **IP** is the most dominant network and the most popular use of sockets
 
 - TCP/IP sockets steps:
-  - Create the socket
+  - ### Create the socket
 
     ```int server_fd = socket(domain, type, protocol)```
     - **domain**, or address family is a communication domain in which the socket should be created
@@ -43,7 +43,25 @@
       - useful in cases where some families may have more than one protocol to support a given type of service
       - 0 for a protocol means *choose the **default protocol** for this address family + socket type*
     - return value is a file descriptor (small int), domain is ```AF_INET``` because we want to specify the IP address family, and type is ```SOCK_STREAM```, protocol is 0
-  - Identify the socket
+
+  - ### Identify (name) the socket
+    - assigning a transport address to the socket (a port number in IP networking)
+    - Which protocol family is this address for? (IPv4, IPv6, ...), What concrete address values are we binding? (IP, port)
+    - this operation is called ***binding an address*** and the **bind** system call is used for this
+
+      ```int bind(int socket, const struct sockaddr *address, socklen_t address_len);```
+    - ```socket``` is the socket that was created with the *socket* system call (a fd), structure ```sockaddr``` is a generic wrapper that allows the OS to be able to read the first couple of bytes that identify the address family, and ```address_len``` says how many bytes defines the address
+    - ```*address``` is a pointer to a real address struct based on the generic interface of ```sockaddr```
+    - for IP networking, we use ```struct sockaddr_in```, which is predefined in ```netinet\in.h```:
+   
+      ```struct sockaddr_in 
+        { 
+            __uint8_t         sin_len; 
+            sa_family_t       sin_family; 
+            in_port_t         sin_port; 
+            struct in_addr    sin_addr; 
+            char              sin_zero[8]; 
+        };
   - On the server, wait for an incoming connection
   - Send and receive messages
   - Close the socket
