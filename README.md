@@ -42,7 +42,7 @@
       - **exact rulebook**, we use 0 because AF_INET + SOCK_STREAM combo = TCP
       - useful in cases where some families may have more than one protocol to support a given type of service
       - 0 for a protocol means *choose the **default protocol** for this address family + socket type*
-    - return value is a file descriptor (small int), domain is ```AF_INET``` because we want to specify the IP address family, and type is ```SOCK_STREAM```, protocol is 0 *(because there are no variations on the protocol - I should check if this changes when we have multiple connections)*
+    - return value is a file descriptor (small int), domain is ```AF_INET``` because we want to specify the IP address family, and type is ```SOCK_STREAM```, protocol is 0
   - Identify the socket
   - On the server, wait for an incoming connection
   - Send and receive messages
