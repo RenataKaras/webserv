@@ -77,6 +77,7 @@
         - ```backlog``` defines the maximum number of pending connections that can be queued up before connections are refused
     - ```accept``` system call grabs the first connection request on the queue of pending conncetions (that we set up in ```listen```) and creates a **new socket** for that connection
       - the original socket that we made for listening is used *only* for accepting connections, but not for exchanging data
+      - by default socket operations are synchronous or **blocking**, and accept will block until a connection is present on the queue
 
         ```int accept(int socket, struct sockaddr *restrict address, socklen_t *restrict address_len);```
         - ```socket``` is the socket we originally set up for accepting connections with ```listen```
