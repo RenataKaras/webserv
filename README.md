@@ -87,7 +87,8 @@
   - ### Send and receive messages
     - communication should be the easy part, the same ```read``` and ```write``` that work on files, work on sockets:
 
-      ```char buffer{1024} = {0};
+      ```c
+      char buffer{1024} = {0};
       int valread = read(new_socket, buffer, 1024);
       printf("%s\n", buffer);
       if (valread < 0)
@@ -95,6 +96,7 @@
 
       char *hello = "Hello from the server\n";
       write(new_socket, hello, strlen(hello));
+      ```
   - ### Close the socket
     - ```close(new_socket);```
 
