@@ -184,8 +184,14 @@
   - Traditional solutions:
     1. Multi-threading: dedicate a thread to each client (resourse intensive and complex to manage)
     2. Multi-processing (```fork()```): create a new process for each client (even more resource-intensive than threading)
+
 - ### Non-Blocking Sockets
   - non-blocking socket will never halt a program, if an operation cannot be completed immediately, it will return an error
     - ```accept()``` if no clients are waiting, it returns an error
     - ```read()``` if there's no data to read, it returns an error
-    - ```write()``` is the kernel's send buffer is full, it returns an error 
+    - ```write()``` is the kernel's send buffer is full, it returns an error
+  -  the socket can be set to non-blocking one with ```fcntl()```(file control) function to change the properties of a file descriptor
+
+        ```fcntl(sockfd, F_SETFL, flags | O_NONBLOCK)```
+  - **new problem** - if we just set the socket to non-blocking and try to read from it in a loop, the ```read()``` will return immediately, no data gives ```EAGAIN```, loop runs again, calls ```read()```, still no data, and this repests millions of times per second which makes CPU run at 100%
+    - this is called ***busy-waiting*** - spinning in a loop checking something over and over
