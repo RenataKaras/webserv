@@ -161,4 +161,16 @@
     - the message phrases shown are typical, but any human-readable alternative may be provided
     - for example if I can't find the file that client is asking, or if the client has no permission to see the file, I send an appropriate code that corresponds with that
     - [List of the status codes that can be used](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes)
+
+   
+  - **EXAMPLE** - we get ```GET /info.html HTTP/1.1```
+    - we have to search for the ```info.html``` file in the **root directory of the server**
+      -  options are: the file is present, the file is absent, the client doesn't have permission to access the file etc.
+      -  we select the appropriate status code
+      -  if the file is present, and the client has permission to access it, then we select the appropriate ```Content-Type```
+      -  then we open the file and read the data into a variable. Count the number of bytes read from the file. We set the ```Content-Length``` with that value.
+      -  then we construct the **Response Header**
+      -  add a ```newline``` at the end of the **Response Header**, and then we append data we have read from the file to it
+      -  send the response to the client!
+      -  DONE
    
