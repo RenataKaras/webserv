@@ -95,7 +95,7 @@
   - ### Close the socket
     - ```close(new_socket);```
 
-## HTTP
+## HTTP (Hypertext Transfer Protocol)
 - outline of the interaction between Web Browser and HTTP Server:
   1. HTTP client (for example, web browser) sends a HTTP request to the HTTP server
   2. Server processes the request received and sends HTTP response to the HTTP client
@@ -150,5 +150,15 @@
         ...
         </html>
         ```
-
+  - **Status code and Status Messages**
+    - issued by a server in response to a client's request made to the server
+    - first digit of the status code specifies one of five standard classes of responses:
+      1. 1xx - informational response
+      2. 2xx - success
+      3. 3xx - redirection
+      4. 4xx - client error
+      5. 5xx - server error 
+    - the message phrases shown are typical, but any human-readable alternative may be provided
+    - for example if I can't find the file that client is asking, or if the client has no permission to see the file, I send an appropriate code that corresponds with that
+    - [List of the status codes that can be used](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes)
    
