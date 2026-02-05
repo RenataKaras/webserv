@@ -70,6 +70,17 @@
             - most of the time we don't care to specify a specific interface and can let the OS use whatever it wants, the special address for this is 0.0.0.0., or ```INADDR_ANY```
          
   - ### On the server, wait for an incoming connection
+    - before a client can connect to a server, the server should have a socket that is prepared to accept the connection
+    - ```listen``` system call tells a socket that it should be capable of accepting incoming connections
+
+      ```int listen(int socket, int backlog);```
+        - ```backlog``` defines the maximum number of pending connections that can be queued up before connections are refused
+    - ```accept``` system call grabs the first connection request on the queue of pending conncetions (that we set up in ```listen```) and creates a **new socket** for that connection
+      - the original socket that we made for listening is used *only* for accepting connections, but not for exchanging data
+
+        ```int accept(int socket, struct sockaddr *restrict address, socklen_t *restrict address_len);```
+        - ```socket``` is the socket we originally set up for accepting connections with ```listen```
+        - ```address``` is the address struct that will be, after we call ```accept```, filled out with client's address(IP and port), and the third parameter is filled in with the length of the address structure
   - ### Send and receive messages
   - ### Close the socket
 
