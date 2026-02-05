@@ -174,4 +174,18 @@
       -  add a ```newline``` at the end of the **Response Header**, and then we append data we have read from the file to it
       -  send the response to the client!
       -  DONE
-   
+
+## Non-Blocking Sockets
+- ### Blocking Sockets
+  - by *default*, socket operation in C are **blocking**
+    - when we call a function like ```accept()```, ```read()``` or ```write()```, the program will halt and wait until that operation is complete
+    - ```accept``` blocks until a new client connects, ```read``` blocks until there is data to be read from the client, and ```write``` blocks until the data has been sent to the kernel's buffer
+  - **problem** is that a server with a blocking socket can only handle one client at a time, and cannot accept new connections or service other clients
+  - Traditional solutions:
+    1. Multi-threading: dedicate a thread to each client (resourse intensive and complex to manage)
+    2. Multi-processing (```fork()```): create a new process for each client (even more resource-intensive than threading)
+- ### Non-Blocking Sockets
+  - non-blocking socket will never halt a program, if an operation cannot be completed immediately, it will return an error
+    - ```accept()``` if no clients are waiting, it returns an error
+    - ```read()``` if there's no data to read, it returns an error
+    - ```write()``` is the kernel's send buffer is full, it returns an error 
