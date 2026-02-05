@@ -53,7 +53,8 @@
       - ```socket``` is the socket that was created with the *socket* system call (a fd), structure ```sockaddr``` is a generic wrapper that allows the OS to be able to read the first couple of bytes that identify the address family, and ```address_len``` says how many bytes defines the address
       - ```*address``` is a pointer to a real address struct based on the generic interface of ```sockaddr```, for IP networking, we use ```struct sockaddr_in```, which is predefined in ```netinet\in.h```:
    
-        ```struct sockaddr_in 
+        ```
+        struct sockaddr_in 
           { 
               __uint8_t         sin_len; 
               sa_family_t       sin_family; 
@@ -61,6 +62,7 @@
               struct in_addr    sin_addr; 
               char              sin_zero[8]; 
           };
+        ```
       - before calling *bind*, we need to fill out this structure with three key parts:
         1. ```sin_family``` -  the address family we used when we set up the socket (```AF_INET```)
         2. ```sin_port``` - the port number (the transport address)
