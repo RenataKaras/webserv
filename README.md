@@ -203,7 +203,9 @@
 
    - **The [object Object] API**
      - 3 main functions of ```epoll``` API:
-       1. ```epoll_ctl(epoll_fd, op, target_fd, &event)```
+       1. ```int epoll_fd = epoll_create1(0);```
+           - creates a **kernel object** whose job is to "keep a list of file descriptors and wake us up when any of them is ready", a sort of a **epoll manager**
+       2. ```epoll_ctl(epoll_fd, op, target_fd, &event);```
            - adds, modifies, or removes file descriptors from the ```epoll``` instance's 'interest list'
            - ```epoll_fd``` the file descriptor for the epoll instance
            - ```op``` the operation to perform:
@@ -212,3 +214,24 @@
              - ```EPOLL_CTL_DEL``` remove ```target_fd``` from the interest list
           - ```target_fd``` the file descriptor we want to monitor (e.g. server socket or a client socket)
           - ```&event``` a pointer to a ```struct epoll_event```. This struct tells ```epoll``` what events are we interested in for ```target_fd```
+
+            ```
+            struct epoll_event {
+            uint32_t      events;  /* Epoll events */
+            epoll_data_t  data;    /* User data variable */
+            };
+            ```
+            - ```events``` a bitmask for events, common ones:
+              - ```EPOLLIN``` the associated file is available for ```read()``` operations
+              - ```EPOLLOUT``` the associated file is available for ```write()``` operations
+              - ```EPOLLET``` sets edge-triggered behaviour
+            - ```data``` is for us to use, and anything can be stored in it
+              - it is common to store the file descriptor itself (```event.data.fd = target_fd;```) or a pointer to a struct containing client state
+
+       3. ```epoll_wait(epoll_fd, events, max_events, timeout);```
+          - this is the core of the event loop, it waits for events on the file descriptors in the interest list
+          - ```epoll_fd``` is the ```epoll``` instance file descriptor
+          - ```events``` is a pointer to an array of ```struct epoll_event``` that will be filled with information about the events that have occured
+          - ```max_events``` is the maximum number of events ```epoll_wait``` should return in a single call
+          - ```timeout``` is the maximum time to wait in milliseconds, a value of ```-1``` means wait indefinitely, a value of ```0``` means return immediately, even if there are no events
+          - **return value** is the number of file descriptors ready for the requested I/O, or ```0``` if it timed out, or ```-1``` on error 
