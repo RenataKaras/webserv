@@ -82,5 +82,73 @@
         - ```socket``` is the socket we originally set up for accepting connections with ```listen```
         - ```address``` is the address struct that will be, after we call ```accept```, filled out with client's address(IP and port), and the third parameter is filled in with the length of the address structure
   - ### Send and receive messages
-  - ### Close the socket
+    - communication should be the easy part, the same ```read``` and ```write``` that work on files, work on sockets:
 
+      ```char buffer{1024} = {0};
+      int valread = read(new_socket, buffer, 1024);
+      printf("%s\n", buffer);
+      if (valread < 0)
+        printf("There are no bytes to read from client\n");
+
+      char *hello = "Hello from the server\n";
+      write(new_socket, hello, strlen(hello));
+  - ### Close the socket
+    - ```close(new_socket);```
+
+## HTTP
+- outline of the interaction between Web Browser and HTTP Server:
+  1. HTTP client (for example, web browser) sends a HTTP request to the HTTP server
+  2. Server processes the request received and sends HTTP response to the HTTP client
+ 
+- ### HTTP Client
+  - Client needs to connect to the server every time, while server **can't** connect to the client
+  - it's the duty of the client to initiate the connection - when we want to connect to the server we type in a URL/Address of the website in the browser ```http://www.example.com:80/index.html```
+    - to display the page, browser fetches the file ```index.html``` from a web server
+
+- ### HTTP Request
+  1. Header: 
+      ```
+      GET /index.html HTTP/1.1
+      Host: www.example.com
+      User-Agent: Mozilla/5.0
+      Accept: text/html, */*
+      Accept-Language: en-us
+      Accept-Charset: ISO-8859-1,utf-8
+      Connection: keep-alive
+      ```
+    
+  - ```GET``` is a method, ```/index.html``` is a URL, and ```HTTP/1.1``` is a protocol version
+  2. Then blank line that marks the break between the header and the body
+  3. Body (optional, for POST and PUT method)
+
+- ### HTTP Methods
+  - There are 9 all together, and some of those 9 are:
+    1. GET - Fetch a URL
+    2. HEAD - Fetch information about a URL
+    3. PUT - Store to an URL
+    4. POST - Send form data to a URL and get a response back
+    5. DELETE - Delete a URL
+       - **GET** and **POST** are most commonly used. Other than these two, we have to implement **DELETE** as well as a part of this project.
+
+- ### HTTP Server / Response
+  - the browser is expecting same format response in which it sent us the request:
+    1. Header:
+        ```
+        HTTP/1.1 200 OK
+        Date: Fri, 16 Mar 2018 17:36:27 GMT
+        Server: *name_of_my_server*
+        Content-Type: text/html;charset=UTF-8
+        Content-Length: 1846
+        ```
+    - ```HTTP/1.1``` is a version, ```200``` is status and ```OK``` is a status message
+    2. Then we have a blank line that marks the break between the header and the body
+    3. Body:
+        ```
+        <?xml ... >
+        <!DOCTYPE HTML ... >
+        <html ... >
+        ...
+        </html>
+        ```
+
+   
