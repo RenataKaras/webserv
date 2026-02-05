@@ -53,16 +53,16 @@
       - ```socket``` is the socket that was created with the *socket* system call (a fd), structure ```sockaddr``` is a generic wrapper that allows the OS to be able to read the first couple of bytes that identify the address family, and ```address_len``` says how many bytes defines the address
       - ```*address``` is a pointer to a real address struct based on the generic interface of ```sockaddr```, for IP networking, we use ```struct sockaddr_in```, which is predefined in ```netinet\in.h```:
    
-```c
-        struct sockaddr_in 
-          { 
-              __uint8_t         sin_len; 
-              sa_family_t       sin_family; 
-              in_port_t         sin_port; 
-              struct in_addr    sin_addr; 
-              char              sin_zero[8]; 
-          };
-```
+        ```c
+        struct sockaddr_in {
+            __uint8_t      sin_len;
+            sa_family_t    sin_family;
+            in_port_t      sin_port;
+            struct in_addr sin_addr;
+            char           sin_zero[8];
+        };
+        ```
+
 
         - before calling *bind*, we need to fill out this structure with three key parts:
           1. ```sin_family``` -  the address family we used when we set up the socket (```AF_INET```)
@@ -113,7 +113,7 @@
 
 - ### HTTP Request
   1. Header: 
-      ```
+      ```http
       GET /index.html HTTP/1.1
       Host: www.example.com
       User-Agent: Mozilla/5.0
@@ -139,7 +139,7 @@
 - ### HTTP Server / Response
   - the browser is expecting same format response in which it sent us the request:
     1. Header:
-        ```
+        ```http
         HTTP/1.1 200 OK
         Date: Fri, 16 Mar 2018 17:36:27 GMT
         Server: *name_of_my_server*
@@ -149,7 +149,7 @@
     - ```HTTP/1.1``` is a version, ```200``` is status and ```OK``` is a status message
     2. Then we have a blank line that marks the break between the header and the body
     3. Body:
-        ```
+        ```http
         <?xml ... >
         <!DOCTYPE HTML ... >
         <html ... >
@@ -220,7 +220,7 @@
           - ```target_fd``` the file descriptor we want to monitor (e.g. server socket or a client socket)
           - ```&event``` a pointer to a ```struct epoll_event```. This struct tells ```epoll``` what events are we interested in for ```target_fd```
 
-            ```
+            ```c
             struct epoll_event {
             uint32_t      events;  /* Epoll events */
             epoll_data_t  data;    /* User data variable */
@@ -233,7 +233,7 @@
             - ```data``` is for us to use, and anything can be stored in it
               - it is common to store the file descriptor itself (```event.data.fd = target_fd;```) or a pointer to a struct containing client state
 
-       3. ```epoll_wait(epoll_fd, events, max_events, timeout);```
+       3. `epoll_wait(epoll_fd, events, max_events, timeout);`
           - this is the core of the event loop, it waits for events on the file descriptors in the interest list
           - ```epoll_fd``` is the ```epoll``` instance file descriptor
           - ```events``` is a pointer to an array of ```struct epoll_event``` that will be filled with information about the events that have occured
