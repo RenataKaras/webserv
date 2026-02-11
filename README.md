@@ -5,8 +5,20 @@
 - [Transport Layer](#transport-layer)
 - [RFC - A Request for Comments](#rfc---a-request-for-comments)
 - [Socket](#socket)
+  - [Create the socket](#create-the-socket)
+  - [Identify (name) the socket](#identify-name-the-socket)
+  - [On the server, wait for an incoming connection](#on-the-server-wait-for-an-incoming-connection)
+  - [Send and receive messages](#send-and-receive-messages)
+  - [Close the socket](#close-the-socket)
 - [HTTP (Hypertext Transfer Protocol)](#http-hypertext-transfer-protocol)
+  - [HTTP Client](#http-client)
+  - [HTTP Request](#http-request)
+  - [HTTP Methods](#http-methods)
+  - [HTTP Server / Response](#http-server--response)
 - [Non-Blocking Sockets](#non-blocking-sockets)
+  - [Blocking Sockets](#blocking-sockets)
+  - [Non-Blocking Sockets](#non-blocking-sockets-1)
+  - [I/O Multiplexing and epoll](#io-multiplexing-and-object-object)
 
 
 ## OSI - Open System Interconnection model
