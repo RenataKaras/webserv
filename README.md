@@ -18,7 +18,7 @@
 - [Non-Blocking Sockets](#non-blocking-sockets)
   - [Blocking Sockets](#blocking-sockets)
   - [Non-Blocking Sockets](#non-blocking-sockets-1)
-  - [I/O Multiplexing and epoll](#io-multiplexing-and-object-object)
+  - [I/O Multiplexing and epoll](#io-multiplexing-and-epoll)
 
 
 ## OSI - Open System Interconnection model
@@ -230,12 +230,12 @@
   - **new problem** - if we just set the socket to non-blocking and try to read from it in a loop, the `read()` will return immediately, no data gives `EAGAIN`, loop runs again, calls `read()`, still no data, and this repests millions of times per second which makes CPU run at 100%
     - this is called ***busy-waiting*** - spinning in a loop checking something over and over
 
- - ### I/O Multiplexing and [object Object]
+ - ### I/O Multiplexing and epoll
    - I/O multiplexing allows us to monitor multiple file descriptors (sockets) at the same time and get notified when one of them is ready for an I/O operation (ready to be read from or written to)
    - `epoll` is a modern and efficient I/O multiplexing API on Linux
      - more scalable than `select()` and `poll()` because it's performance doesn't degrade as the number of monitored file descriptors increases
 
-   - **The [object Object] API**
+   - **The epoll API**
      - 3 main functions of `epoll` API:
        1. ```c
           int epoll_fd = epoll_create1(0);
