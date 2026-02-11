@@ -242,6 +242,13 @@
               - `EPOLLIN` the associated file is available for `read()` operations
               - `EPOLLOUT` the associated file is available for `write()` operations
               - `EPOLLET` sets edge-triggered behaviour
+                - **Edge-triggered(ET) vs Level-triggered(LT) events**
+                  1. Level-triggered (LT) is the default
+                      - `epoll_wait` will continuously report an event as long as the condition holds
+                  2. Edge-triggered (ET) - `epoll_wait` will only report an event *once* when the state changes
+                      - it's more efficient because it prevents `epoll_wait` from constantly reminding us about an event that hasn't been handled yet
+                      - it has a catch -  when we get ET notification, the file descriptor **must** be processsed until it would block - if we only read part of the data, `epoll` won't notify us about it again and it will sit in the buffer forever
+                      - using while loops aroung `accept()` and `read()` to avoid this scenario
             - `data` is for us to use, and anything can be stored in it
               - it is common to store the file descriptor itself (`event.data.fd = target_fd;`) or a pointer to a struct containing client state
 
