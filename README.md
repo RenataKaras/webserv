@@ -1,5 +1,14 @@
 # webserv
 
+## Table of Contents
+- [OSI - Open System Interconnection model](#osi---open-system-interconnection-model)
+- [Transport Layer](#transport-layer)
+- [RFC - A Request for Comments](#rfc---a-request-for-comments)
+- [Socket](#socket)
+- [HTTP (Hypertext Transfer Protocol)](#http-hypertext-transfer-protocol)
+- [Non-Blocking Sockets](#non-blocking-sockets)
+
+
 ## OSI - Open System Interconnection model
 - characterizes and standardizes communication functions of a telecommunication or computing system without regard to its underlying internal structure and technology
 - it partitions a communication system into abstraction layers (7 of them)
