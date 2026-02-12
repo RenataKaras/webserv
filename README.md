@@ -234,23 +234,28 @@
    - I/O multiplexing allows us to monitor multiple file descriptors (sockets) at the same time and get notified when one of them is ready for an I/O operation (ready to be read from or written to)
    - `epoll` is a modern and efficient I/O multiplexing API on Linux
      - more scalable than `select()` and `poll()` because it's performance doesn't degrade as the number of monitored file descriptors increases
+     - the cost of epoll is O(number of events that have occured) and not O(number of descriptors being monitored)
 
    - **The epoll API**
      - 3 main functions of `epoll` API:
        1. ```c
+          #include <sys/epoll.h>
           int epoll_fd = epoll_create1(0);
           ```
           - creates a **kernel object** whose job is to "keep a list of file descriptors and wake us up when any of them is ready", a sort of a **epoll manager**
        2. ```c
+          int epoll_ctl(int epoll_fd, int op, int target_fd, struct epoll_event *event);
+
+          //example:
           epoll_ctl(epoll_fd, op, target_fd, &event);
           ```
-          - adds, modifies, or removes file descriptors from the `epoll` instance's 'interest list'
-           - `epoll_fd` the file descriptor for the epoll instance
-           - `op` the operation to perform:
+          - adds, modifies, or removes file descriptors from the `epoll` instance's *interest list* (also called epoll set)
+           - `epoll_fd` the file descriptor for the epoll instance returned by `epoll_create`
+           - `op` the operation to perform on the file descriptor `target_fd`
              - `EPOLL_CTL_ADD` add `target_fd` to the interest list
              - `EPOLL_CTL_MOD` modify the events for `target_fd`
              - `EPOLL_CTL_DEL` remove `target_fd` from the interest list
-          - `target_fd` the file descriptor we want to monitor (e.g. server socket or a client socket)
+          - `target_fd` the file descriptor we want to monitor / add to the *epoll list/interest list* (e.g. server socket or a client socket)
           - `&event` a pointer to a `struct epoll_event`. This struct tells `epoll` what events are we interested in for `target_fd`
 
             ```c
@@ -259,7 +264,7 @@
             epoll_data_t  data;    /* User data variable */
             };
             ```
-            - `events` a bitmask for events, common ones:
+            - `events` a bitmask that indicates which events `target_fd` is being monitored for, common ones:
               - `EPOLLIN` the associated file is available for `read()` operations
               - `EPOLLOUT` the associated file is available for `write()` operations
               - `EPOLLET` sets edge-triggered behaviour
@@ -274,11 +279,14 @@
               - it is common to store the file descriptor itself (`event.data.fd = target_fd;`) or a pointer to a struct containing client state
 
        3. ```c
+          int epoll_wait(int epoll_fd, struct epoll_event *events, int max_events, int timeout);
+
+          //example:
           epoll_wait(epoll_fd, events, max_events, timeout);
           ```
           - this is the core of the event loop, it waits for events on the file descriptors in the interest list
-          - `epoll_fd` is the `epoll` instance file descriptor
-          - `events` is a pointer to an array of `struct epoll_event` that will be filled with information about the events that have occured
-          - `max_events` is the maximum number of events `epoll_wait` should return in a single call
+          - `epoll_fd` is the `epoll` instance file descriptor, the one returned by `epoll_create`
+          - `events` is a pointer to an array of `struct epoll_event` that will be filled with information about the events that have occured (the subset of the file descriptors in the interest list that are in the *ready* state - *ready list*)
+          - `max_events` is the maximum number of events `epoll_wait` should return in a single call, also the length of the `events` array
           - `timeout` is the maximum time to wait in milliseconds, a value of `-1` means wait indefinitely, a value of `0` means return immediately, even if there are no events
           - **return value** is the number of file descriptors ready for the requested I/O, or `0` if it timed out, or `-1` on error 
